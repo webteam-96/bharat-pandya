@@ -221,14 +221,7 @@ p { margin: 0; max-width: 62ch; }
 }
 .hero__title { font-size: clamp(50px, 8.6vw, 124px); }
 .hero__title .ln { display: block; overflow: hidden; }
-.hero__title .ln > span {
-  display: block;
-  transform: translateY(102%);
-  animation: rise .95s cubic-bezier(.22,.85,.25,1) forwards;
-}
-.hero__title .ln:nth-child(2) > span { animation-delay: .09s; }
-.hero__title .ln:nth-child(3) > span { animation-delay: .18s; }
-@keyframes rise { to { transform: translateY(0); } }
+.hero__title .ln > span { display: block; }
 
 .hero__deck {
   font-size: clamp(19px, 2.1vw, 26px);
@@ -262,9 +255,7 @@ p { margin: 0; max-width: 62ch; }
   border: 1px solid var(--hair);
   box-shadow: 14px 14px 0 var(--ink);
   background: #fff;
-  animation: pop .8s .25s cubic-bezier(.22,.85,.25,1) both;
 }
-@keyframes pop { from { opacity: 0; transform: translate(14px, 14px); } to { opacity: 1; transform: none; } }
 .poster img { width: 100%; }
 
 /* ══ Overview: pinned card, scrolling text ═══════════════════════════ */
@@ -733,13 +724,22 @@ p { margin: 0; max-width: 62ch; }
 .dock .dock__arrow:hover { background: #24b6f5; }
 
 /* ══ Reveal ══════════════════════════════════════════════════════════ */
-.rv {
-  opacity: 0;
-  transform: translateY(22px);
-  clip-path: inset(0 0 12% 0);
-  transition: opacity .62s cubic-bezier(.22,.85,.25,1), transform .62s cubic-bezier(.22,.85,.25,1), clip-path .62s cubic-bezier(.22,.85,.25,1);
+/* scroll progress, driven by ScrollTrigger */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  overflow: hidden;
 }
-.rv.in { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--sky);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
 
 /* ══ Narrow ══════════════════════════════════════════════════════════ */
 @media (max-width: 1080px) {
@@ -779,8 +779,6 @@ p { margin: 0; max-width: 62ch; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rv { opacity: 1; transform: none; clip-path: none; transition: none; }
-  .hero__title .ln > span, .poster { animation: none; transform: none; opacity: 1; }
   .cta:hover { transform: none; }
 }
 </style>
@@ -788,6 +786,7 @@ p { margin: 0; max-width: 62ch; }
 <header class="topbar">
   <div class="topbar__name">Wheel of Honour<span class="topbar__sub"> &mdash; RI Zones 4 &amp; 8</span></div>
   <div class="topbar__date"><span class="tag">date</span> Sun 25 Oct 2026<span class="topbar__sub">&middot; Mumbai</span></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
 </header>
 
 <main>
@@ -1113,6 +1112,9 @@ p { margin: 0; max-width: 62ch; }
   </a>
 </nav>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
 <script>
 (function () {
   "use strict";
@@ -1149,25 +1151,88 @@ p { margin: 0; max-width: 62ch; }
     })(t0);
   }
 
-  /* ── Anything that animates once, when it arrives ───────────────── */
-  var entrants = [].slice.call(document.querySelectorAll(".rv, .stat"));
-  if (reduce || !("IntersectionObserver" in window)) {
-    entrants.forEach(function (el) { el.classList.add("in"); });
-  } else {
-    var eo = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        el.classList.add("in");
-        if (el.classList.contains("stat")) {
+  /* ── GSAP ────────────────────────────────────────────────────────
+     Everything below is additive: the page is fully readable before any
+     of it runs, so a blocked CDN costs the motion and nothing else. */
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* the rule under the topbar tracks how far down the page you are */
+    gsap.to(".progress span", {
+      scaleX: 1,
+      ease: "none",
+      scrollTrigger: { start: 0, end: "max", scrub: 0.3 }
+    });
+
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", function () {
+
+      /* ── Hero, on load ── */
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .from(".hero__title .ln > span", { yPercent: 106, duration: 1, stagger: 0.09 })
+        .from(".hero__eyebrow", { autoAlpha: 0, y: 12, duration: 0.6 }, 0)
+        .from(".poster", { autoAlpha: 0, scale: 0.95, duration: 1, ease: "power2.out" }, 0.15)
+        .from(".hero__deck", { autoAlpha: 0, y: 18, duration: 0.7 }, 0.3)
+        .from(".hero__meta", { autoAlpha: 0, y: 14, duration: 0.6 }, 0.42)
+        .from(".hero__actions", { autoAlpha: 0, y: 18, duration: 0.6 }, 0.5);
+
+      /* the card drifts as the hero leaves */
+      gsap.to(".poster", {
+        yPercent: -9,
+        ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.5 }
+      });
+
+      /* ── Everything marked .rv ──
+         One trigger per element rather than ScrollTrigger.batch: batch is
+         driven by IntersectionObserver, so a dock link that jumps past a
+         section leaves everything it skipped invisible. Position-based
+         triggers still fire in that case. Siblings keep their stagger. */
+      gsap.set(".rv", { autoAlpha: 0, y: 28 });
+      [].forEach.call(document.querySelectorAll(".rv"), function (el) {
+        var sibs = [].filter.call(el.parentNode.children, function (n) { return n.classList.contains("rv"); });
+        gsap.to(el, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.75,
+          ease: "power3.out",
+          delay: Math.min(sibs.indexOf(el), 4) * 0.08,
+          scrollTrigger: { trigger: el, start: "top 88%", once: true }
+        });
+      });
+
+      /* ── District chips pop in behind their panel ── */
+      [].forEach.call(document.querySelectorAll(".zone"), function (z) {
+        gsap.from(z.querySelectorAll(".zone__ds span"), {
+          autoAlpha: 0,
+          scale: 0.75,
+          duration: 0.45,
+          stagger: 0.03,
+          ease: "back.out(1.7)",
+          scrollTrigger: { trigger: z, start: "top 76%", once: true }
+        });
+      });
+
+      /* ── The portrait rides the scroll a little ── */
+      gsap.to(".portrait", {
+        yPercent: -7,
+        ease: "none",
+        scrollTrigger: { trigger: "#honouree", start: "top bottom", end: "bottom top", scrub: 0.6 }
+      });
+
+      /* ── Countdown counts up the first time it is seen ── */
+      ScrollTrigger.create({
+        trigger: ".stat",
+        start: "top 85%",
+        once: true,
+        onEnter: function () {
           ["d", "h", "m"].forEach(function (k, i) {
             countUp(slot[k], parseInt(slot[k].textContent, 10) || 0, 900 + i * 180);
           });
         }
-        eo.unobserve(el);
       });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
-    entrants.forEach(function (el) { eo.observe(el); });
+
+      return function () { gsap.set(".rv", { clearProps: "all" }); };
+    });
   }
 
   /* ── Scroll-spy: the dock tab takes its section's accent ────────── */
