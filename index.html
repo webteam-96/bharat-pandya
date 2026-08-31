@@ -112,6 +112,13 @@ p { margin: 0; max-width: 62ch; }
 .block--paper { background: var(--paper); color: var(--ink); }
 .block--sand  { background: var(--sand);  color: var(--ink); }
 .block--ink   { background: var(--ink);   color: var(--paper); }
+.block--gold  { background: var(--gold);  color: var(--ink); }
+.block--gold.grid-bg {
+  background-image:
+    linear-gradient(to right,  rgba(4,22,46,.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(4,22,46,.10) 1px, transparent 1px);
+}
+.block--gold .tag { color: #7a4406; }
 .block--ink p, .block--ink .lede { color: #cfdcec; }
 
 .shell {
@@ -627,31 +634,55 @@ p { margin: 0; max-width: 62ch; }
 .crew__pre { font-family: var(--mono); font-size: 12.5px; letter-spacing: .04em; color: var(--mute); display: block; margin-bottom: 7px; }
 
 /* ══ Closing ═════════════════════════════════════════════════════════ */
-.close { text-align: center; display: grid; justify-items: center; gap: clamp(20px, 3vw, 32px); }
-.close .display { max-width: 14ch; }
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  max-width: none;
+.close {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: clamp(30px, 5vw, 78px);
+  align-items: center;
 }
-.chips span {
-  font-family: var(--mono);
-  font-size: clamp(12px, 1.3vw, 14.5px);
-  letter-spacing: .06em;
-  text-transform: uppercase;
+.close__left { display: flex; flex-direction: column; align-items: flex-start; gap: clamp(18px, 2.4vw, 28px); }
+.close__left .display { max-width: 11ch; }
+.close__fine { font-family: var(--mono); font-size: 13px; letter-spacing: .04em; color: #6d4406; max-width: none; }
+
+.stub {
+  background: var(--paper);
   border: 1px solid var(--hair);
-  background: #fff;
-  color: var(--ink);
-  padding: 11px 17px;
+  box-shadow: 14px 14px 0 var(--ink);
+  padding: 26px 28px 30px;
 }
-.chips .fill {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--on-accent, #fff);
+.stub__k {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--mute);
+  display: block;
+  margin-bottom: 18px;
+}
+.stub dl { margin: 0; border-top: 1px solid var(--hair-soft); }
+.stub dl > div {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 5px 18px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hair-soft);
+}
+.stub dt {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--mute);
+  padding-top: 3px;
+}
+.stub dd {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.35;
+  letter-spacing: -.015em;
   font-weight: 500;
 }
+.stub dd .sub { display: block; font-weight: 400; font-size: 14.5px; color: var(--mute); margin-top: 3px; }
 
 /* ══ Footer ══════════════════════════════════════════════════════════ */
 .foot { border-top: 1px solid var(--hair-dark); }
@@ -748,6 +779,9 @@ p { margin: 0; max-width: 62ch; }
   .poster { width: min(100%, 460px); box-shadow: 10px 10px 0 var(--ink); }
   .pinned { grid-template-columns: minmax(0, 1fr); }
   .pinned__aside { position: static; }
+  .close { grid-template-columns: minmax(0, 1fr); }
+  .close__left .display { max-width: 15ch; }
+  .stub { box-shadow: 10px 10px 0 var(--ink); }
   .honour { grid-template-columns: minmax(0, 1fr); }
   .portrait { max-width: 280px; }
 }
@@ -984,7 +1018,7 @@ p { margin: 0; max-width: 62ch; }
 
       <div class="legend rv">
         <div>
-          <span class="legend__sw">3070</span>
+          <span class="legend__sw">&mdash;&mdash;&mdash;&mdash;</span>
           <p><b>Council district.</b> Its governors sit on the Council and may register as COG.</p>
         </div>
         <div>
@@ -1050,26 +1084,31 @@ p { margin: 0; max-width: 62ch; }
   </section>
 
   <!-- ══ Closing ══ -->
-  <section class="block block--sand grid-bg">
+  <section class="block block--gold grid-bg">
     <div class="shell pad-y close">
-      <span class="tag rv">you are invited</span>
-      <h2 class="display rv">Take your place at the wheel</h2>
-      <div class="chips rv">
-        <span class="fill" style="--accent:var(--royal)">25.10.2026</span>
-        <span>10:30 IST</span>
-        <span>Hotel Sahara Star, Mumbai</span>
+      <div class="close__left">
+        <span class="tag rv">you are invited</span>
+        <h2 class="display rv">Take your place at the wheel</h2>
+        <div class="rv">
+          <a class="cta" href="https://kaizenevents.live/register/wheel-of-honour">
+            <span class="cta__label">Register now</span>
+            <span class="cta__arrow" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M4 13 13 4M13 4H6M13 4v7" stroke="#04162e" stroke-width="1.8"/></svg>
+            </span>
+          </a>
+        </div>
+        <p class="close__fine rv">Seating is limited &middot; Payment is taken at the time of registering</p>
       </div>
-      <div class="rv">
-        <a class="cta" href="https://kaizenevents.live/register/wheel-of-honour">
-          <span class="cta__label">Register now</span>
-          <span class="cta__arrow" aria-hidden="true">
-            <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M4 13 13 4M13 4H6M13 4v7" stroke="#04162e" stroke-width="1.8"/></svg>
-          </span>
-        </a>
-      </div>
-      <div class="chips rv">
-        <span class="fill" style="--accent:var(--gold); --on-accent:#04162e">&#8377;3,000 per person</span>
-        <span>Seating is limited</span>
+
+      <div class="stub rv">
+        <span class="stub__k">at a glance</span>
+        <dl>
+          <div><dt>Date</dt><dd>Sunday, 25 October 2026</dd></div>
+          <div><dt>Time</dt><dd>10:30 &ndash; 13:00 IST<span class="sub">Followed by lunch</span></dd></div>
+          <div><dt>Venue</dt><dd>Hotel Sahara Star<span class="sub">Vile Parle, Mumbai</span></dd></div>
+          <div><dt>Open to</dt><dd>Council of Governors<span class="sub">and Rotarians of RID 3141 &amp; 3142</span></dd></div>
+          <div><dt>Contribution</dt><dd>&#8377;3,000<span class="sub">per registration</span></dd></div>
+        </dl>
       </div>
     </div>
   </section>
