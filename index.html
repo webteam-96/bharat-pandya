@@ -189,9 +189,7 @@ p { margin: 0; max-width: 62ch; }
   border: 1px solid var(--hair);
   width: max-content;
   max-width: 100%;
-  transition: transform .16s ease;
 }
-.cta:hover { transform: translate(-2px, -2px); }
 .cta__label {
   background: var(--ink);
   color: var(--paper);
@@ -758,9 +756,6 @@ p { margin: 0; max-width: 62ch; }
 .c { display: inline-block; white-space: pre; }
 
 /* the button's arrow square leans into the click */
-.cta__arrow svg { transition: translate .22s cubic-bezier(.2,.8,.3,1); }
-.cta:hover .cta__arrow svg { translate: 2px -2px; }
-.cta:active { transform: translate(0, 0); }
 
 /* dock tabs wipe rather than just recolour. The wipe is the element's own
    background-image, not a pseudo-element: a z-index:-1 pseudo paints behind
@@ -801,8 +796,55 @@ p { margin: 0; max-width: 62ch; }
 .stub dl > div { transition: background .18s ease; }
 .stub dl > div:hover { background: rgba(4,22,46,.04); }
 
+
+/* buttons shift ground and throw a hard shadow, matching the card lifts */
+.cta { transition: transform .18s cubic-bezier(.2,.8,.3,1), box-shadow .18s cubic-bezier(.2,.8,.3,1); }
+.cta__label { transition: background .2s ease; }
+.cta__arrow svg { transition: translate .22s cubic-bezier(.2,.8,.3,1); }
+.cta:hover .cta__arrow svg { translate: 2px -2px; }
+.cta__arrow { transition: background .2s ease; }
+.cta:hover { transform: translate(-3px, -3px); box-shadow: 5px 5px 0 var(--ink); }
+.cta:hover .cta__label { background: var(--royal); }
+.cta:hover .cta__arrow { background: #35bcf7; }
+.cta:active { transform: translate(0, 0); box-shadow: 0 0 0 var(--ink); }
+.block--gold .cta:hover { box-shadow: 5px 5px 0 #8a5c05; }
+
+/* the dock's own button matches, without moving the fixed bar */
+.dock__cta { transition: background .2s ease; }
+.dock a.dock__cta:hover { background: var(--royal); color: var(--paper); }
+.dock a.dock__arrow:hover { background: #35bcf7; }
+
+/* steps: the numeral chip steps forward with its card */
+.steps li { transition: background .2s ease; }
+.steps li:hover { background: rgba(247,247,247,.045); }
+.steps .num { transition: transform .2s cubic-bezier(.2,.8,.3,1); display: inline-block; }
+.steps li:hover .num { transform: translate(3px, -3px); }
+
+/* zone panels warm their border */
+.zone { transition: border-color .22s ease, transform .22s cubic-bezier(.2,.8,.3,1); }
+.zone:hover { border-color: var(--sky); transform: translateY(-3px); }
+
+/* the ticket stub lifts like the other cards */
+.stub:hover { transform: translate(-3px, -3px); box-shadow: 17px 17px 0 var(--ink); }
+
+/* quiet row highlights */
+.legend > div { transition: background .18s ease; }
+.legend > div:hover { background: #eef4fb; }
+.glance > div { transition: background .18s ease; }
+.glance > div:hover { background: rgba(247,247,247,.05); }
+.glance > div:hover dt { color: var(--sky); }
+
+/* gate headers nudge their numeral */
+.gate__top .num { transition: transform .2s cubic-bezier(.2,.8,.3,1); display: inline-block; }
+.gate:hover .gate__top .num { transform: translateX(4px); }
+
+/* committee role chips lean out */
+.crew__role { transition: transform .2s cubic-bezier(.2,.8,.3,1); }
+.crew > div:hover .crew__role { transform: translate(3px, -3px); }
+
 @media (hover: none) {
-  .cell:hover, .gate:hover, .crew > div:hover { transform: none; box-shadow: none; }
+  .cell:hover, .gate:hover, .crew > div:hover, .cta:hover, .stub:hover, .zone:hover { transform: none; box-shadow: none; }
+  .steps li:hover .num, .gate:hover .gate__top .num, .crew > div:hover .crew__role { transform: none; }
   .zone__ds span:hover { transform: none; }
 }
 
@@ -865,8 +907,9 @@ p { margin: 0; max-width: 62ch; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cta__arrow svg, .dock a, .cell, .gate, .crew > div, .stub, .facts > div, .zone__ds span, .foot a, .stub dl > div { transition: none; }
-  .cta:hover, .cell:hover, .gate:hover, .crew > div:hover, .zone__ds span:hover { transform: none; }
+  .cta, .cta__label, .cta__arrow, .cta__arrow svg, .dock a, .dock__cta, .cell, .gate, .gate__top .num, .crew > div, .crew__role, .stub, .steps li, .steps .num, .zone, .facts > div, .zone__ds span, .foot a, .stub dl > div, .legend > div, .glance > div { transition: none; }
+  .cta:hover, .cell:hover, .gate:hover, .crew > div:hover, .zone__ds span:hover, .stub:hover, .zone:hover { transform: none; box-shadow: none; }
+  .steps li:hover .num, .gate:hover .gate__top .num, .crew > div:hover .crew__role { transform: none; }
   .cta:hover { transform: none; }
 }
 </style>
