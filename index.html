@@ -464,6 +464,53 @@ p { margin: 0; max-width: 62ch; }
   max-width: none;
 }
 
+.zonehead { margin-top: clamp(34px, 4.5vw, 58px); }
+.zones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
+  border-top: 1px solid var(--hair);
+  border-left: 1px solid var(--hair);
+  margin-top: clamp(20px, 2.6vw, 30px);
+}
+.zone {
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  background: #fff;
+  padding: 22px 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.zone__k {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #fff;
+  background: var(--accent);
+  padding: 4px 9px;
+  width: max-content;
+}
+.zone__geo { font-size: 16px; line-height: 1.4; color: var(--mute); }
+.zone__ds { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; }
+.zone__ds span {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13.5px;
+  border: 1px solid var(--hair-soft);
+  padding: 6px 10px;
+  color: var(--ink);
+}
+.zone__ds .host { background: var(--accent); border-color: var(--accent); color: #fff; }
+.zonenote {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mute);
+  margin-top: 14px;
+  max-width: none;
+}
+.zonenote i { font-style: normal; background: var(--royal); color: #fff; padding: 2px 6px; }
+
 /* ══ Steps ═══════════════════════════════════════════════════════════ */
 .steps {
   list-style: none;
@@ -491,6 +538,42 @@ p { margin: 0; max-width: 62ch; }
   width: max-content;
 }
 .steps p { color: #b7c8dc; font-size: 16px; line-height: 1.45; }
+
+.band-tight { padding-block: clamp(48px, 6vw, 84px); }
+.crew {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+  border-top: 1px solid var(--hair);
+  border-left: 1px solid var(--hair);
+  margin-top: clamp(24px, 3vw, 38px);
+}
+.crew > div {
+  border-right: 1px solid var(--hair);
+  border-bottom: 1px solid var(--hair);
+  background: #fff;
+  padding: 22px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.crew__role {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #fff;
+  background: var(--accent);
+  padding: 4px 9px;
+  width: max-content;
+}
+.crew__name {
+  font-size: clamp(21px, 2.1vw, 27px);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  line-height: 1.1;
+  margin-top: auto;
+}
+.crew__pre { font-family: var(--mono); font-size: 12.5px; letter-spacing: .04em; color: var(--mute); display: block; margin-bottom: 7px; }
 
 /* ══ Closing ═════════════════════════════════════════════════════════ */
 .close { text-align: center; display: grid; justify-items: center; gap: clamp(20px, 3vw, 32px); }
@@ -641,7 +724,7 @@ p { margin: 0; max-width: 62ch; }
       <p class="hero__deck">A global salute to Dr.&nbsp;Bharat Pandya, Rotary International President 2028&ndash;29.</p>
       <div class="hero__meta">
         <span><b>Host:</b> Rotary Club of Borivili</span>
-        <span><b>With:</b> RI Districts 3141 &amp; 3142</span>
+        <span><b>Host districts:</b> RI 3141 &amp; RI 3142</span>
       </div>
       <a class="cta" href="https://kaizenevents.live/register/wheel-of-honour">
         <span class="cta__label">Register now</span>
@@ -791,6 +874,29 @@ p { margin: 0; max-width: 62ch; }
         </div>
       </div>
 
+      <div class="sechead zonehead rv">
+        <span class="tag">the constituency</span>
+        <h3 class="h3">Zones 4 and 8</h3>
+      </div>
+
+      <div class="zones rv">
+        <div class="zone" style="--accent:var(--royal)">
+          <span class="zone__k">zone 4</span>
+          <p class="zone__geo">India (north and northwest), Russia</p>
+          <div class="zone__ds">
+            <span>2223</span><span>3011</span><span>3012</span><span>3053</span><span>3055</span><span>3056</span><span>3070</span><span>3080</span><span>3090</span>
+          </div>
+        </div>
+        <div class="zone" style="--accent:var(--royal)">
+          <span class="zone__k">zone 8</span>
+          <p class="zone__geo">India (western)</p>
+          <div class="zone__ds">
+            <span>3030</span><span>3040</span><span>3060</span><span>3131</span><span>3132</span><span class="host">3141</span><span class="host">3142</span><span>3172</span>
+          </div>
+        </div>
+      </div>
+      <p class="zonenote rv">Governors of every district above sit on the Council. <i>3141</i> <i>3142</i> are the host districts &mdash; the two whose Rotarians may register.</p>
+
       <p class="warn rv">Registration is open only to Rotarians from RI Districts 3141 and 3142, and to members of the Council of Governors. If your club is not on the list, please contact your district office before registering.</p>
     </div>
   </section>
@@ -823,6 +929,30 @@ p { margin: 0; max-width: 62ch; }
     </div>
   </section>
 
+  <!-- ══ Committee ══ -->
+  <section class="block block--paper">
+    <div class="shell band-tight">
+      <div class="sechead rv">
+        <span class="tag">organising committee</span>
+        <h2 class="h2">Behind the morning</h2>
+      </div>
+      <div class="crew">
+        <div class="rv" style="--accent:var(--berry)">
+          <span class="crew__role">convenor</span>
+          <span class="crew__name"><span class="crew__pre">PRID</span>Raju Subramanian</span>
+        </div>
+        <div class="rv" style="--accent:var(--royal)">
+          <span class="crew__role">co-convenor</span>
+          <span class="crew__name"><span class="crew__pre">PDG</span>Shashi Sharma</span>
+        </div>
+        <div class="rv" style="--accent:var(--royal)">
+          <span class="crew__role">co-convenor</span>
+          <span class="crew__name"><span class="crew__pre">PDG</span>Kailash Jethani</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══ Closing ══ -->
   <section class="block block--sand grid-bg">
     <div class="shell pad-y close">
@@ -848,7 +978,7 @@ p { margin: 0; max-width: 62ch; }
     <div class="foot__grid">
       <div>
         <h4>Hosted by</h4>
-        <p>Rotary Club of Borivili, with the Rotarians of RI Districts 3141 and 3142. RI Zones 4 and 8.</p>
+        <p>Rotary Club of Borivili, with the Rotarians of the host districts RI 3141 and RI 3142. Council of Governors, RI Zones 4 and 8.</p>
       </div>
       <div>
         <h4>Questions</h4>
