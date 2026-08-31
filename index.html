@@ -257,8 +257,8 @@ p { margin: 0; max-width: 62ch; }
 }
 .poster {
   position: relative;
-  z-index: 1;
-  width: 100%;
+  /* capped by the viewport too, so the card never clips on short screens */
+  width: min(100%, 560px, calc((100svh - 210px) * 0.84));
   border: 1px solid var(--hair);
   box-shadow: 14px 14px 0 var(--ink);
   background: #fff;
@@ -266,72 +266,6 @@ p { margin: 0; max-width: 62ch; }
 }
 @keyframes pop { from { opacity: 0; transform: translate(14px, 14px); } to { opacity: 1; transform: none; } }
 .poster img { width: 100%; }
-
-/* ══ Decorative objects ══════════════════════════════════════════════ */
-.hero__stage {
-  position: relative;
-  width: min(100%, 560px, calc((100svh - 210px) * 0.84));
-}
-.deco {
-  position: absolute;
-  display: block;
-  pointer-events: none;
-  will-change: translate;
-}
-.deco svg { display: block; width: 100%; height: auto; overflow: visible; }
-.deco--float svg { animation: bob 7s ease-in-out infinite; }
-.deco--gear   { width: 42%; top: -17%; right: -23%; z-index: 0; }
-.deco--medal  { width: 27%; bottom: -6%; left: -14%; z-index: 2; }
-.deco--star   { width: 15%; top: -6%; left: -9%; z-index: 2; }
-.deco--spark  { width: 11%; bottom: -6%; right: -7%; z-index: 0; }
-.deco--medal svg { animation-duration: 5.4s; animation-delay: -1.8s; }
-.deco--star svg  { animation-duration: 4.6s; animation-delay: -3.1s; }
-.deco--spark svg { animation-duration: 6.2s; animation-delay: -.9s; }
-@keyframes bob { 50% { transform: translateY(-9px) rotate(2deg); } }
-
-.gearspin { animation: spin 90s linear infinite; transform-origin: 50% 50%; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* the wheel behind the closing line, drawn rather than pasted */
-.closeart {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  width: min(118vw, 940px);
-  aspect-ratio: 1;
-  z-index: 0;
-  pointer-events: none;
-}
-.closeart path, .closeart circle, .closeart line {
-  fill: none;
-  stroke: rgba(4, 22, 46, .17);
-  stroke-width: 2;
-}
-.closeart .draw {
-  stroke-dasharray: var(--len);
-  stroke-dashoffset: var(--len);
-  transition: stroke-dashoffset 2.4s cubic-bezier(.3,.7,.3,1);
-}
-.closeart.in .draw { stroke-dashoffset: 0; }
-
-/* the hands settle on 10:30 when the cell scrolls in */
-.clock {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  width: 58px;
-  height: 58px;
-}
-.clock circle, .clock line { stroke: var(--ink); }
-.clock .face { fill: #fff; stroke-width: 4; }
-.clock .tick { stroke-width: 3; }
-.clock .pin { fill: var(--ink); stroke: none; }
-.clock .hand { stroke-linecap: round; transform-origin: 50px 50px; transition: transform 1.9s cubic-bezier(.25,.9,.25,1); }
-.clock .hh { stroke-width: 6; }
-.clock .mh { stroke-width: 4.5; }
-.cell.in .clock .hh { transform: rotate(315deg); }
-.cell.in .clock .mh { transform: rotate(180deg); }
 
 /* ══ Overview: pinned card, scrolling text ═══════════════════════════ */
 .pinned {
@@ -446,7 +380,6 @@ p { margin: 0; max-width: 62ch; }
   margin-top: clamp(30px, 4vw, 52px);
 }
 .cell {
-  position: relative;
   border-right: 1px solid var(--hair);
   border-bottom: 1px solid var(--hair);
   padding: 20px 22px 30px;
@@ -812,8 +745,7 @@ p { margin: 0; max-width: 62ch; }
 @media (max-width: 1080px) {
   .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .hero__right { border-left: 0; border-top: 1px solid var(--hair); }
-  .hero__stage { width: min(100%, 460px); }
-  .poster { box-shadow: 10px 10px 0 var(--ink); }
+  .poster { width: min(100%, 460px); box-shadow: 10px 10px 0 var(--ink); }
   .pinned { grid-template-columns: minmax(0, 1fr); }
   .pinned__aside { position: static; }
   .honour { grid-template-columns: minmax(0, 1fr); }
@@ -848,10 +780,6 @@ p { margin: 0; max-width: 62ch; }
 
 @media (prefers-reduced-motion: reduce) {
   .rv { opacity: 1; transform: none; clip-path: none; transition: none; }
-  .deco--float svg, .gearspin { animation: none; }
-  .deco { translate: none !important; }
-  .closeart .draw { transition: none; stroke-dashoffset: 0; }
-  .clock .hand { transition: none; }
   .hero__title .ln > span, .poster { animation: none; transform: none; opacity: 1; }
   .cta:hover { transform: none; }
 }
@@ -887,59 +815,9 @@ p { margin: 0; max-width: 62ch; }
     </div>
 
     <div class="hero__right grid-bg">
-      <div class="hero__stage">
-        <figure class="poster" style="margin:0">
-          <img id="posterImg" alt="Official announcement card for Wheel of Honour: a felicitation ceremony celebrating the honour bestowed upon Dr. Bharat Pandya as Rotary International President 2028-29, Sunday 25th October 2026, 10:30 AM to 1:00 PM followed by lunch, Hotel Sahara Star, Vile Parle, Mumbai." />
-        </figure>
-
-        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-          <g id="gearShape">
-            <path id="gearBody" d=""/>
-            <circle cx="100" cy="100" r="23" fill="none" stroke-width="8"/>
-            <g stroke-width="9" fill="none" stroke-linecap="butt">
-              <line x1="100" y1="77" x2="100" y2="49"/><line x1="100" y1="123" x2="100" y2="151"/>
-              <line x1="80.1" y1="88.5" x2="55.8" y2="74.5"/><line x1="119.9" y1="111.5" x2="144.2" y2="125.5"/>
-              <line x1="80.1" y1="111.5" x2="55.8" y2="125.5"/><line x1="119.9" y1="88.5" x2="144.2" y2="74.5"/>
-            </g>
-          </g>
-          <g id="starShape">
-            <path d="M50 3 C55 30 70 45 97 50 C70 55 55 70 50 97 C45 70 30 55 3 50 C30 45 45 30 50 3 Z"/>
-          </g>
-          <g id="medalShape">
-            <path d="M27 5 L43 60 L57 60 L73 5 L56 5 L50 33 L44 5 Z"/>
-            <circle cx="50" cy="69" r="27"/>
-            <circle cx="50" cy="69" r="13" fill="none" stroke-width="4"/>
-          </g>
-        </defs></svg>
-
-        <span class="deco deco--gear deco--float" data-par="-0.10" aria-hidden="true">
-          <svg viewBox="0 0 200 200"><g class="gearspin">
-            <use href="#gearShape" x="11" y="11" fill="#04162e" stroke="#04162e" stroke-width="5"/>
-            <use href="#gearShape" fill="#f7a81b" stroke="#04162e" stroke-width="5" stroke-linejoin="round"/>
-          </g></svg>
-        </span>
-
-        <span class="deco deco--medal deco--float" data-par="0.16" aria-hidden="true">
-          <svg viewBox="0 0 100 100">
-            <use href="#medalShape" x="8" y="8" fill="#04162e" stroke="#04162e" stroke-width="5"/>
-            <use href="#medalShape" fill="#d41367" stroke="#04162e" stroke-width="5" stroke-linejoin="round"/>
-          </svg>
-        </span>
-
-        <span class="deco deco--star deco--float" data-par="0.24" aria-hidden="true">
-          <svg viewBox="0 0 100 100">
-            <use href="#starShape" x="9" y="9" fill="#04162e" stroke="#04162e" stroke-width="6"/>
-            <use href="#starShape" fill="#00a2e8" stroke="#04162e" stroke-width="6" stroke-linejoin="round"/>
-          </svg>
-        </span>
-
-        <span class="deco deco--spark deco--float" data-par="-0.2" aria-hidden="true">
-          <svg viewBox="0 0 100 100">
-            <use href="#starShape" x="9" y="9" fill="#04162e" stroke="#04162e" stroke-width="6"/>
-            <use href="#starShape" fill="#f7a81b" stroke="#04162e" stroke-width="6" stroke-linejoin="round"/>
-          </svg>
-        </span>
-      </div>
+      <figure class="poster" style="margin:0">
+        <img id="posterImg" alt="Official announcement card for Wheel of Honour: a felicitation ceremony celebrating the honour bestowed upon Dr. Bharat Pandya as Rotary International President 2028-29, Sunday 25th October 2026, 10:30 AM to 1:00 PM followed by lunch, Hotel Sahara Star, Vile Parle, Mumbai." />
+      </figure>
     </div>
   </section>
 
@@ -1020,13 +898,6 @@ p { margin: 0; max-width: 62ch; }
           <span class="cell__v">Sunday<br />25 October 2026</span>
         </div>
         <div class="cell" style="--accent:var(--turq)">
-          <svg class="clock" viewBox="0 0 100 100" aria-hidden="true">
-            <circle class="face" cx="50" cy="50" r="44"/>
-            <g class="tick"><line x1="50" y1="12" x2="50" y2="20"/><line x1="88" y1="50" x2="80" y2="50"/><line x1="50" y1="88" x2="50" y2="80"/><line x1="12" y1="50" x2="20" y2="50"/></g>
-            <line class="hand hh" x1="50" y1="50" x2="50" y2="30"/>
-            <line class="hand mh" x1="50" y1="50" x2="50" y2="22"/>
-            <circle class="pin" cx="50" cy="50" r="4"/>
-          </svg>
           <span class="cell__k">time</span>
           <span class="cell__n">Followed by lunch.</span>
           <span class="cell__v">10:30 &ndash; 13:00</span>
@@ -1180,18 +1051,8 @@ p { margin: 0; max-width: 62ch; }
   </section>
 
   <!-- ══ Closing ══ -->
-  <section class="block block--sand grid-bg" style="overflow:hidden">
-    <svg class="closeart" viewBox="0 0 400 400" aria-hidden="true"><g class="gearspin">
-      <path class="draw" id="closeGear" d=""/>
-      <circle class="draw" cx="200" cy="200" r="150"/>
-      <circle class="draw" cx="200" cy="200" r="34"/>
-      <g class="draw" stroke-width="6">
-        <line x1="200" y1="166" x2="200" y2="50"/><line x1="200" y1="234" x2="200" y2="350"/>
-        <line x1="170.6" y1="183" x2="70.1" y2="125"/><line x1="229.4" y1="217" x2="329.9" y2="275"/>
-        <line x1="170.6" y1="217" x2="70.1" y2="275"/><line x1="229.4" y1="183" x2="329.9" y2="125"/>
-      </g>
-    </g></svg>
-    <div class="shell pad-y close" style="position:relative; z-index:1">
+  <section class="block block--sand grid-bg">
+    <div class="shell pad-y close">
       <span class="tag rv">you are invited</span>
       <h2 class="display rv">Take your place at the wheel</h2>
       <div class="chips rv">
@@ -1263,27 +1124,6 @@ p { margin: 0; max-width: 62ch; }
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ── Gear outlines are generated, not hand-authored path data ────── */
-  function gearD(cx, cy, rRoot, rTip, teeth) {
-    var steps = teeth * 20, d = "";
-    for (var i = 0; i < steps; i++) {
-      var a = (i / steps) * Math.PI * 2;
-      var r = ((i / steps) * teeth) % 1 < 0.5 ? rTip : rRoot;
-      d += (i ? "L" : "M") + (cx + Math.cos(a) * r).toFixed(1) + " " + (cy + Math.sin(a) * r).toFixed(1);
-    }
-    return d + "Z";
-  }
-  document.getElementById("gearBody").setAttribute("d", gearD(100, 100, 84, 97, 24));
-  document.getElementById("closeGear").setAttribute("d", gearD(200, 200, 176, 194, 32));
-
-  /* stroke-dash draw needs the real path length */
-  var art = document.querySelector(".closeart");
-  [].forEach.call(art.querySelectorAll(".draw"), function (el) {
-    var geo = el.getTotalLength ? [el] : [].slice.call(el.children);
-    var max = 0;
-    geo.forEach(function (g) { max = Math.max(max, g.getTotalLength()); });
-    el.style.setProperty("--len", Math.ceil(max));
-  });
 
   /* ── Countdown to 25 Oct 2026, 10:30 IST ───────────────────────── */
   var when = new Date("2026-10-25T10:30:00+05:30").getTime();
@@ -1310,7 +1150,7 @@ p { margin: 0; max-width: 62ch; }
   }
 
   /* ── Anything that animates once, when it arrives ───────────────── */
-  var entrants = [].slice.call(document.querySelectorAll(".rv, .closeart, .cells .cell, .stat"));
+  var entrants = [].slice.call(document.querySelectorAll(".rv, .stat"));
   if (reduce || !("IntersectionObserver" in window)) {
     entrants.forEach(function (el) { el.classList.add("in"); });
   } else {
@@ -1328,18 +1168,6 @@ p { margin: 0; max-width: 62ch; }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
     entrants.forEach(function (el) { eo.observe(el); });
-  }
-
-  /* ── Objects drift against the scroll ───────────────────────────── */
-  var pars = [].slice.call(document.querySelectorAll("[data-par]"));
-  function parallax() {
-    if (reduce) return;
-    var vh = window.innerHeight;
-    pars.forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      var d = (r.top + r.height / 2 - vh / 2) / vh;
-      el.style.translate = "0 " + (d * parseFloat(el.dataset.par) * 120).toFixed(1) + "px";
-    });
   }
 
   /* ── Scroll-spy: the dock tab takes its section's accent ────────── */
@@ -1377,10 +1205,9 @@ p { margin: 0; max-width: 62ch; }
   function onScroll() {
     if (queued) return;
     queued = true;
-    requestAnimationFrame(function () { queued = false; spy(); parallax(); });
+    requestAnimationFrame(function () { queued = false; spy(); });
   }
   spy();
-  parallax();
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
 })();
