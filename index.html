@@ -464,52 +464,112 @@ p { margin: 0; max-width: 62ch; }
   max-width: none;
 }
 
-.zonehead { margin-top: clamp(34px, 4.5vw, 58px); }
+.zonehead { margin-top: clamp(38px, 5vw, 64px); }
+.zonelede { margin-top: 4px; font-size: clamp(16.5px, 1.6vw, 19px); line-height: 1.45; color: var(--mute); max-width: 56ch; }
+
 .zones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
+  gap: clamp(14px, 1.6vw, 20px);
+  margin-top: clamp(22px, 2.8vw, 32px);
+}
+.zone {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--hair);
+  padding: 24px 26px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.zone__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--hair-dark);
+  padding-bottom: 18px;
+}
+.zone__no {
+  font-size: clamp(42px, 5vw, 62px);
+  font-weight: 500;
+  letter-spacing: -.05em;
+  line-height: .85;
+  font-variant-numeric: tabular-nums;
+}
+.zone__no small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--mute-dark);
+  margin-bottom: 12px;
+}
+.zone__count {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--sky);
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+.zone__geo { font-size: 16px; line-height: 1.4; color: #b7c8dc; }
+.zone__ds {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: auto;
+}
+.zone__ds span {
+  font-family: var(--mono);
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  text-align: center;
+  padding: 11px 4px;
+  border: 1px solid var(--hair-dark);
+  color: var(--paper);
+}
+.zone__ds .host {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.legend {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   border-top: 1px solid var(--hair);
   border-left: 1px solid var(--hair);
-  margin-top: clamp(20px, 2.6vw, 30px);
+  margin-top: clamp(14px, 1.6vw, 20px);
 }
-.zone {
+.legend > div {
   border-right: 1px solid var(--hair);
   border-bottom: 1px solid var(--hair);
   background: #fff;
-  padding: 22px 24px 26px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 18px 22px;
 }
-.zone__k {
-  font-family: var(--mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: #fff;
-  background: var(--accent);
-  padding: 4px 9px;
-  width: max-content;
-}
-.zone__geo { font-size: 16px; line-height: 1.4; color: var(--mute); }
-.zone__ds { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 6px; }
-.zone__ds span {
+.legend__sw {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
-  font-size: 13.5px;
-  border: 1px solid var(--hair-soft);
-  padding: 6px 10px;
+  font-size: 14px;
+  text-align: center;
+  padding: 11px 12px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
   color: var(--ink);
 }
-.zone__ds .host { background: var(--accent); border-color: var(--accent); color: #fff; }
-.zonenote {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--mute);
-  margin-top: 14px;
-  max-width: none;
-}
-.zonenote i { font-style: normal; background: var(--royal); color: #fff; padding: 2px 6px; }
+.legend__sw.host { background: var(--gold); border-color: var(--gold); font-weight: 500; }
+.legend p { font-size: 15.5px; line-height: 1.4; color: var(--mute); max-width: none; }
+.legend b { color: var(--ink); font-weight: 500; }
 
 /* ══ Steps ═══════════════════════════════════════════════════════════ */
 .steps {
@@ -578,12 +638,28 @@ p { margin: 0; max-width: 62ch; }
 /* ══ Closing ═════════════════════════════════════════════════════════ */
 .close { text-align: center; display: grid; justify-items: center; gap: clamp(20px, 3vw, 32px); }
 .close .display { max-width: 14ch; }
-.close__line {
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
   max-width: none;
+}
+.chips span {
   font-family: var(--mono);
-  font-size: clamp(12.5px, 1.5vw, 15px);
-  color: var(--mute);
-  letter-spacing: .01em;
+  font-size: clamp(12px, 1.3vw, 14.5px);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border: 1px solid var(--hair);
+  background: #fff;
+  color: var(--ink);
+  padding: 11px 17px;
+}
+.chips .fill {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent, #fff);
+  font-weight: 500;
 }
 
 /* ══ Footer ══════════════════════════════════════════════════════════ */
@@ -685,6 +761,10 @@ p { margin: 0; max-width: 62ch; }
   .dock a:not(.dock__cta):not(.dock__arrow) { display: none; }
   .dock .dock__cta { justify-content: center; }
 }
+@media (max-width: 480px) {
+  .zone__ds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 @media (max-width: 560px) {
   .topbar__name { font-size: 14px; white-space: nowrap; }
   .topbar__sub { display: none; }
@@ -877,25 +957,42 @@ p { margin: 0; max-width: 62ch; }
       <div class="sechead zonehead rv">
         <span class="tag">the constituency</span>
         <h3 class="h3">Zones 4 and 8</h3>
+        <p class="zonelede">Seventeen districts across northern, north-western and western India, and Russia. Every one of them sends its governors to the Council.</p>
       </div>
 
-      <div class="zones rv">
-        <div class="zone" style="--accent:var(--royal)">
-          <span class="zone__k">zone 4</span>
+      <div class="zones">
+        <div class="zone rv">
+          <div class="zone__head">
+            <span class="zone__no"><small>zone</small>04</span>
+            <span class="zone__count">9 districts</span>
+          </div>
           <p class="zone__geo">India (north and northwest), Russia</p>
           <div class="zone__ds">
             <span>2223</span><span>3011</span><span>3012</span><span>3053</span><span>3055</span><span>3056</span><span>3070</span><span>3080</span><span>3090</span>
           </div>
         </div>
-        <div class="zone" style="--accent:var(--royal)">
-          <span class="zone__k">zone 8</span>
+        <div class="zone rv">
+          <div class="zone__head">
+            <span class="zone__no"><small>zone</small>08</span>
+            <span class="zone__count">8 districts</span>
+          </div>
           <p class="zone__geo">India (western)</p>
           <div class="zone__ds">
             <span>3030</span><span>3040</span><span>3060</span><span>3131</span><span>3132</span><span class="host">3141</span><span class="host">3142</span><span>3172</span>
           </div>
         </div>
       </div>
-      <p class="zonenote rv">Governors of every district above sit on the Council. <i>3141</i> <i>3142</i> are the host districts &mdash; the two whose Rotarians may register.</p>
+
+      <div class="legend rv">
+        <div>
+          <span class="legend__sw">3070</span>
+          <p><b>Council district.</b> Its governors sit on the Council and may register as COG.</p>
+        </div>
+        <div>
+          <span class="legend__sw host">3141</span>
+          <p><b>Host district.</b> Every Rotarian of its clubs may register.</p>
+        </div>
+      </div>
 
       <p class="warn rv">Registration is open only to Rotarians from RI Districts 3141 and 3142, and to members of the Council of Governors. If your club is not on the list, please contact your district office before registering.</p>
     </div>
@@ -958,7 +1055,11 @@ p { margin: 0; max-width: 62ch; }
     <div class="shell pad-y close">
       <span class="tag rv">you are invited</span>
       <h2 class="display rv">Take your place at the wheel</h2>
-      <p class="close__line rv">25.10.2026 &middot; 10:30 IST &middot; HOTEL SAHARA STAR, MUMBAI</p>
+      <div class="chips rv">
+        <span class="fill" style="--accent:var(--royal)">25.10.2026</span>
+        <span>10:30 IST</span>
+        <span>Hotel Sahara Star, Mumbai</span>
+      </div>
       <div class="rv">
         <a class="cta" href="https://kaizenevents.live/register/wheel-of-honour">
           <span class="cta__label">Register now</span>
@@ -967,7 +1068,10 @@ p { margin: 0; max-width: 62ch; }
           </span>
         </a>
       </div>
-      <p class="close__line rv">&#8377;3,000 per person &middot; Seating is limited</p>
+      <div class="chips rv">
+        <span class="fill" style="--accent:var(--gold); --on-accent:#04162e">&#8377;3,000 per person</span>
+        <span>Seating is limited</span>
+      </div>
     </div>
   </section>
 
