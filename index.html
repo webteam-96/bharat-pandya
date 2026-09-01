@@ -598,7 +598,7 @@ p { margin: 0; max-width: 62ch; }
 .band-tight { padding-block: clamp(48px, 6vw, 84px); }
 .crew {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(270px, 100%), 1fr));
+  grid-template-columns: repeat(12, 1fr);
   border-top: 1px solid var(--hair);
   border-left: 1px solid var(--hair);
   margin-top: clamp(24px, 3vw, 38px);
@@ -630,6 +630,17 @@ p { margin: 0; max-width: 62ch; }
   margin-top: auto;
 }
 .crew__pre { font-family: var(--mono); font-size: 13.5px; letter-spacing: .04em; color: var(--mute); display: block; margin-bottom: 7px; }
+
+/* seven cards: 3 leads over 4 officers, so no row ends ragged */
+.crew > div { grid-column: span 3; }
+.crew > .crew--lead { grid-column: span 4; }
+@media (max-width: 1080px) {
+  .crew > div, .crew > .crew--lead { grid-column: span 6; }
+  .crew > div:last-child { grid-column: span 12; }
+}
+@media (max-width: 620px) {
+  .crew > div, .crew > .crew--lead, .crew > div:last-child { grid-column: span 12; }
+}
 
 /* ══ Closing ═════════════════════════════════════════════════════════ */
 .close {
@@ -1164,17 +1175,33 @@ p { margin: 0; max-width: 62ch; }
         <h2 class="h2">Behind the morning</h2>
       </div>
       <div class="crew">
-        <div class="rv" style="--accent:var(--berry)">
+        <div class="rv crew--lead" style="--accent:var(--berry)">
           <span class="crew__role">convenor</span>
-          <span class="crew__name"><span class="crew__pre">PRID</span>Raju Subramanian</span>
+          <span class="crew__name"><span class="crew__pre">PRID</span>T. N. (Raju) Subramanian</span>
         </div>
-        <div class="rv" style="--accent:var(--royal)">
+        <div class="rv crew--lead" style="--accent:var(--royal)">
           <span class="crew__role">co-convenor</span>
           <span class="crew__name"><span class="crew__pre">PDG</span>Shashi Sharma</span>
         </div>
-        <div class="rv" style="--accent:var(--royal)">
+        <div class="rv crew--lead" style="--accent:var(--royal)">
           <span class="crew__role">co-convenor</span>
           <span class="crew__name"><span class="crew__pre">PDG</span>Kailash Jethani</span>
+        </div>
+        <div class="rv" style="--accent:var(--azure)">
+          <span class="crew__role">host DG &middot; 3141</span>
+          <span class="crew__name"><span class="crew__pre">DG</span>Rajan Dua</span>
+        </div>
+        <div class="rv" style="--accent:var(--azure)">
+          <span class="crew__role">host DG &middot; 3142</span>
+          <span class="crew__name"><span class="crew__pre">DG</span>Nilesh Jaywant</span>
+        </div>
+        <div class="rv" style="--accent:var(--turq)">
+          <span class="crew__role">secretary</span>
+          <span class="crew__name"><span class="crew__pre">PDG</span>Prafull J. Sharma</span>
+        </div>
+        <div class="rv" style="--accent:var(--turq)">
+          <span class="crew__role">jt. secretary</span>
+          <span class="crew__name"><span class="crew__pre">PDG</span>Chetan D. Desai</span>
         </div>
       </div>
     </div>
@@ -1399,8 +1426,9 @@ p { margin: 0; max-width: 62ch; }
           ease: "power3.out",
           delay: Math.min(sibs.indexOf(el), 4) * 0.08,
           /* hand the element back to CSS, or the inline transform GSAP
-             leaves behind outranks the :hover rules */
-          onComplete: function () { gsap.set(el, { clearProps: "all" }); },
+             leaves behind outranks the :hover rules. Named props only:
+             clearProps "all" also wipes the inline --accent tokens. */
+          onComplete: function () { gsap.set(el, { clearProps: "opacity,visibility,transform" }); },
           scrollTrigger: { trigger: el, start: "top 88%", once: true }
         });
       });
@@ -1436,7 +1464,7 @@ p { margin: 0; max-width: 62ch; }
         }
       });
 
-      return function () { gsap.set(".rv", { clearProps: "all" }); };
+      return function () { gsap.set(".rv", { clearProps: "opacity,visibility,transform" }); };
     });
   }
 
